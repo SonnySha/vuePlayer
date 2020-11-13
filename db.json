@@ -1,0 +1,34 @@
+{
+    "playlist": [
+        {
+            "title": "Bad kind of mongrel",
+            "author": "Michael MCQuaid",
+            "urlSong": "http://localhost/apisongs/songs/bad-kind-of-mongrel.mp3",
+            "img": "http://localhost/apisongs/img/bad-kind-of-mongrel.jpg"
+        },
+        {
+            "title": "My summer love",
+            "author": "Belair",
+            "urlSong": "http://localhost/apisongs/songs/my-summer-love.mp3",
+            "img": "http://localhost/apisongs/img/my-summer-love.jpg"
+        },
+        {
+            "title": "Roundabout",
+            "author": "The IMG",
+            "urlSong": "http://localhost/apisongs/songs/roundabout.mp3",
+            "img": "http://localhost/apisongs/img/roundabout.jpg"
+        },
+        {
+            "title": "Hungry",
+            "author": "Weary Eyes",
+            "urlSong": "http://localhost/apisongs/songs/hungry.mp3",
+            "img": "http://localhost/apisongs/img/hungry.jpg"
+        },
+        {
+            "title": "Disco",
+            "author": "Stage Engine",
+            "urlSong": "http://localhost/apisongs/songs/disco-kid.mp3",
+            "img": "http://localhost/apisongs/img/disco-kid.jpg"
+        }
+    ]
+}
