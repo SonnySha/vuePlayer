@@ -1,4 +1,4 @@
-# sonnyplayer
+# Sonny Chaprier
 
 ## Project setup
 ```
