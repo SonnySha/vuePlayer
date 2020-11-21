@@ -3,7 +3,7 @@ module.exports = {
     "vuetify"
   ],
   pwa: {
-    themeColor: "#42b983",
+    themeColor: "#SansPwa",
     msTileColor: "#42b983",
     appleMobileWebAppCache: "yes",
     manifestOptions: {
