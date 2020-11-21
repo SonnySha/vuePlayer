@@ -1,41 +1,55 @@
 <template>
   <div class="bkgPlayer rounded-xl">
-    <v-card id="player" elevation="4" class="mx-auto rounded-xl">
-      <v-img
-        height="342"
-        class="rounded-xl"
-        :src="this.imgSong"
-        alt="qzqzd"
-      ></v-img>
+    <v-row>
+      <v-col class="pt-0 mainController">
+        <v-card id="player" elevation="4" class="mx-auto rounded-xl">
+          <v-img
+            height="342"
+            class="rounded-xl"
+            :src="this.imgSong"
+            alt="qzqzd"
+          ></v-img>
 
-      <v-card-actions class="playerControls rounded-lg justify-center">
-        <v-row class="flex-column">
-          <p class="text-center">{{ this.title }}</p>
-          <p class="text-center">{{ this.author }}</p>
-        </v-row>
-        <v-row class="justify-center">
-          <v-btn @click="previousSong" color="" class="ma-2 white--text" fab>
-            <v-icon dark> mdi-skip-previous </v-icon>
-          </v-btn>
+          <v-card-actions class="playerControls rounded-lg justify-center">
+            <v-row class="flex-column">
+              <p class="text-center">{{ this.title }}</p>
+              <p class="text-center">{{ this.author }}</p>
+            </v-row>
+            <v-row class="justify-center">
+              <v-btn
+                @click="previousSong"
+                color=""
+                class="ma-2 white--text"
+                fab
+              >
+                <v-icon dark> mdi-skip-previous </v-icon>
+              </v-btn>
 
-          <v-btn @click="playSong" color="" class="ma-2 white--text" fab>
-            <v-icon dark> mdi-{{ this.isPlayed ? "pause" : "play" }} </v-icon>
-          </v-btn>
-          <v-btn @click="nextSong" class="ma-2 white--text" fab>
-            <v-icon class="iconPlayer" dark> mdi-skip-next </v-icon>
-          </v-btn>
+              <v-btn @click="playSong" color="" class="ma-2 white--text" fab>
+                <v-icon dark>
+                  mdi-{{ this.isPlayed ? "pause" : "play" }}
+                </v-icon>
+              </v-btn>
+              <v-btn @click="nextSong" class="ma-2 white--text" fab>
+                <v-icon class="iconPlayer" dark> mdi-skip-next </v-icon>
+              </v-btn>
 
-          <audio id="audio" ref="player">
-            <source id="playerSource" ref="playerSource" src="" />
-            Your browser does not support the audio format.
-          </audio>
-        </v-row>
-      </v-card-actions>
-    </v-card>
-    <div class="playerDisplay">
-      <v-btn @click="openPlaylist">Playlist</v-btn>
-      <router-view></router-view>
-    </div>
+              <audio id="audio" ref="player">
+                <source id="playerSource" ref="playerSource" src="" />
+                Your browser does not support the audio format.
+              </audio>
+            </v-row>
+          </v-card-actions>
+        </v-card>
+        <div class="playerDisplay">
+          <v-btn @click="openPlaylist">Playlist</v-btn>
+          <router-view></router-view>
+        </div>
+      </v-col>
+      <!-- <v-col>
+        <h2>Votre file d'attente</h2>
+      </v-col> -->
+    </v-row>
   </div>
 </template>
 
@@ -115,6 +129,10 @@ export default {
 </script>
 
 <style scoped>
+.mainController {
+  min-width: 325px;
+}
+
 .bkgPlayer {
   background-color: white;
   width: 100%;
