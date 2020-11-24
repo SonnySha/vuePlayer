@@ -42,7 +42,60 @@
           </v-card-actions>
         </v-card>
         <div class="playerDisplay">
-          <v-btn @click="openPlaylist">Playlist</v-btn>
+          <v-row justify="center">
+            <v-dialog v-model="dialog" persistent max-width="290">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn color="red" dark v-bind="attrs" v-on="on">
+                  Favoris
+                </v-btn>
+              </template>
+              <v-card>
+                <v-card-title class="headline"> Vos favoris </v-card-title>
+                <v-card-text>
+                  <!-- <v-list>
+                    <v-list-item
+                      v-for="(songid, index) in this.songsFavoris"
+                      :key="index"
+                    >
+                      <v-list-item-avatar>
+                        <v-img :src="this.songs[songid].img"></v-img>
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title
+                          >{{ songid }}
+                          {{ this.songs[songid].title }}</v-list-item-title
+                        >
+                        <v-list-item-subtitle
+                          ><p>
+                            {{ this.songs[songid].author }}
+                          </p></v-list-item-subtitle
+                        >
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list> -->
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="green darken-1" text @click="dialog = false">
+                    Fermer
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-row>
+
+          <h2 v-if="this.songsWaiting.length > 0">File d'attente</h2>
+          <ul>
+            <li v-for="(song, index) in this.songsWaiting" :key="index">
+              {{ song.title }}
+            </li>
+          </ul>
+
+          <Playlist
+            @songWaiting="addSongWaiting"
+            @songIndex="playSongByIndex"
+            :songs="songs"
+          ></Playlist>
           <router-view></router-view>
         </div>
       </v-col>
@@ -54,6 +107,7 @@
 </template>
 
 <script>
+import Playlist from "./Playlist";
 export default {
   created() {
     fetch("http://localhost:3000/playlist")
@@ -64,13 +118,17 @@ export default {
     return {
       title: "",
       author: "",
-      imgSong: "http://localhost/apisongs/img/spotify.jpg",
+      imgSong: "https://memorykeeper.fr/apisongs/img/spotify.jpg",
       isPlayed: false,
       indexSongPlayed: -1,
       songs: [],
+      songsWaiting: [],
+      dialog: false,
     };
   },
-
+  components: {
+    Playlist,
+  },
   methods: {
     playSong() {
       let player = this.$refs["player"];
@@ -105,6 +163,9 @@ export default {
     playSongByIndex(indexNewSong) {
       this.indexSongPlayed = indexNewSong;
     },
+    addSongWaiting(indexSongAdd) {
+      this.songsWaiting.push(this.songs[indexSongAdd]);
+    },
     openPlaylist() {
       this.$router.push({
         name: "playlist",
@@ -116,10 +177,25 @@ export default {
     indexSongPlayed(newIndex) {
       let player = this.$refs["player"];
       let playerSource = this.$refs["playerSource"];
-      this.title = this.songs[newIndex]["title"];
-      this.author = this.songs[newIndex]["author"];
-      this.imgSong = this.songs[newIndex]["img"];
-      playerSource.src = this.songs[newIndex]["urlSong"];
+
+      // Si il y a une musique mis en attente on la jouera
+      if (this.songsWaiting.length > 0) {
+        this.title = this.songsWaiting[0]["title"];
+        this.author = this.songsWaiting[0]["author"];
+        this.imgSong = this.songsWaiting[0]["img"];
+        playerSource.src = this.songsWaiting[0]["urlSong"];
+        this.songsWaiting.shift();
+      } else {
+        this.title = this.songs[newIndex]["title"];
+        this.author = this.songs[newIndex]["author"];
+        this.imgSong = this.songs[newIndex]["img"];
+        playerSource.src = this.songs[newIndex]["urlSong"];
+      }
+
+      // this.title = this.songs[newIndex]["title"];
+      // this.author = this.songs[newIndex]["author"];
+      // this.imgSong = this.songs[newIndex]["img"];
+      // playerSource.src = this.songs[newIndex]["urlSong"];
       player.load();
       player.play();
       this.isPlayed = true;
@@ -161,6 +237,7 @@ export default {
 }
 
 .playerDisplay {
+  max-width: 480px;
   margin-top: 15%;
   padding: 5%;
 }

@@ -21,7 +21,7 @@ self.addEventListener("install", event => {
 self.addEventListener('fetch', function (event) {
     event.respondWith(
 
-        // Cache les ressources asynchroness
+        // Cache les ressources asynchrones
         caches.open(myCache).then(function (cache) {
             return cache.match(event.request).then(function (response) {
                 return (
@@ -33,6 +33,7 @@ self.addEventListener('fetch', function (event) {
                 );
             });
         }),
+
 
 
     );

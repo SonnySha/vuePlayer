@@ -1,8 +1,9 @@
 <template>
   <div class="mt-6">
-    <p>Artiste:</p>
     <h3>{{ this.songs[$route.params.idauthor]["author"] }}</h3>
-    <p>Biographie: Lorem ipsum doqdqzdqdzqlor</p>
+    <p class="bio">
+      Biographie: {{ this.songs[$route.params.idauthor]["bio"] }}
+    </p>
   </div>
 </template>
 
@@ -20,3 +21,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.bio {
+  /* max-width: 300px; */
+}
+</style>

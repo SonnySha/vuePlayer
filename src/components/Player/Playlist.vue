@@ -16,9 +16,21 @@
           >
         </v-list-item-content>
         <v-list-item-action>
-          <v-btn class="ma-2" outlined fab x-small color="teal">
-            <v-icon @click="selectSong(index)">mdi-play</v-icon>
-          </v-btn>
+          <v-row>
+            <v-btn class="ma-2" x-small outlined fab dark color="error">
+              <v-icon @click="addSongFavoris(index)" dark>
+                mdi-heart-plus
+              </v-icon>
+            </v-btn>
+            <v-btn class="ma-2" x-small outlined fab dark color="teal">
+              <v-icon @click="songWaiting(index)" dark>
+                mdi-format-list-bulleted-square
+              </v-icon>
+            </v-btn>
+            <v-btn class="ma-2" outlined fab x-small color="teal">
+              <v-icon @click="selectSong(index)">mdi-play</v-icon>
+            </v-btn>
+          </v-row>
         </v-list-item-action>
       </v-list-item>
     </v-list>
@@ -36,6 +48,9 @@ export default {
   methods: {
     selectSong(index) {
       this.$emit("songIndex", index);
+    },
+    songWaiting(index) {
+      this.$emit("songWaiting", index);
     },
   },
 };
