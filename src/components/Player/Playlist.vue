@@ -18,7 +18,7 @@
         <v-list-item-action>
           <v-row>
             <v-btn class="ma-2" x-small outlined fab dark color="error">
-              <v-icon @click="addFavoris(index)" dark> mdi-heart-plus </v-icon>
+              <v-icon @click="addFavoris()" dark> mdi-heart-plus </v-icon>
             </v-btn>
             <v-btn class="ma-2" x-small outlined fab dark color="blue">
               <v-icon @click="songWaiting(index)" dark>
@@ -52,13 +52,23 @@ export default {
     songWaiting(index) {
       this.$emit("songWaiting", index);
     },
-    addFavoris(idFavoris) {
-      const favori = {
-        favoris_id: idFavoris,
-      };
-      fire.database().ref("favoris").push(favori);
+    addFavoris() {
+      // const favori = {
+      //   favoris_id: idFavoris,
+      // };
+      // fire.database().ref("favoris").push(favori);
       // this.mounted();
       // this.updData();
+
+      const favori = {
+        title: "My summer love",
+        author: "Belair",
+        bio:
+          "Aenean lobortis placerat maximus. In vitae diam massa. Fusce erat libero, tincidunt quis accumsan ut, eleifend volutpat orci. Praesent rhoncus sed elit non placerat",
+        urlSong: "https://memorykeeper.fr/apisongs/songs/my-summer-love.mp3",
+        img: "https://memorykeeper.fr/apisongs/img/my-summer-love.jpg",
+      };
+      fire.database().ref("playlist").push(favori);
     },
     updData() {
       console.log("update !");
