@@ -5,6 +5,8 @@ import router from './router'
 import { store } from './store/store';
 import KnobControl from 'vue-knob-control'
 
+
+
 Vue.config.productionTip = false
 
 Vue.use(KnobControl)
@@ -27,6 +29,9 @@ if ('serviceWorker' in navigator) {
       console.error('Erreur: ', error);
     });
 }
+
+
+
 
 // var deferredPrompt;
 

@@ -49,16 +49,54 @@
         </v-card>
         <div class="playerDisplay">
           <!-- Prochainement pour la modal FAVORIS -->
-          <!-- <v-row justify="center">
+          <v-row justify="center">
             <v-dialog v-model="dialog" persistent max-width="290">
               <template v-slot:activator="{ on, attrs }">
-                <v-btn color="red" dark v-bind="attrs" v-on="on">
+                <v-btn
+                  @click="mounted()"
+                  color="red"
+                  dark
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <v-icon @click="addFavoris(index)" dark> mdi-heart </v-icon>
                   Favoris
                 </v-btn>
               </template>
               <v-card>
                 <v-card-title class="headline"> Vos favoris </v-card-title>
                 <v-card-text>
+                  <v-list>
+                    <v-list-item
+                      v-for="(favori, index) in this.favoris"
+                      :key="index"
+                    >
+                      <v-btn
+                        class="ma-2"
+                        x-small
+                        outlined
+                        fab
+                        dark
+                        color="error"
+                      >
+                        <v-icon @click="delFavoris(favori.id)" dark>
+                          mdi-delete-forever-outline
+                        </v-icon>
+                      </v-btn>
+                      <v-list-item-avatar>
+                        <v-img :src="songs[favori.favoris_id].img"></v-img>
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title>{{
+                          songs[favori.favoris_id].title
+                        }}</v-list-item-title>
+                        <p>{{ favori.id }}</p>
+                        <v-list-item-subtitle>{{
+                          songs[favori.favoris_id].author
+                        }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -68,15 +106,18 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
-          </v-row> -->
-
+          </v-row>
           <h2 v-if="this.songsWaiting.length > 0">File d'attente</h2>
           <ul>
             <li v-for="(song, index) in this.songsWaiting" :key="index">
               {{ song.title }}
             </li>
           </ul>
-
+          <!-- <input
+            v-model="search"
+            type="search"
+            placeholder="rechercher une musique"
+          /> -->
           <Playlist
             @songWaiting="addSongWaiting"
             @songIndex="playSongByIndex"
@@ -95,6 +136,7 @@
 <script>
 import Playlist from "./Playlist";
 import knobControl from "vue-knob-control";
+import fire from "../../fire";
 
 export default {
   created() {
@@ -111,8 +153,10 @@ export default {
       indexSongPlayed: -1,
       songs: [],
       songsWaiting: [],
+      favoris: [],
       dialog: false,
       volume: 20,
+      search: "",
     };
   },
   components: {
@@ -156,10 +200,23 @@ export default {
     addSongWaiting(indexSongAdd) {
       this.songsWaiting.push(this.songs[indexSongAdd]);
     },
-    openPlaylist() {
-      this.$router.push({
-        name: "playlist",
-        params: {},
+    delFavoris(idFavori) {
+      fire.database().ref("favoris").child(idFavori).remove();
+
+      this.mounted();
+    },
+    mounted() {
+      const itemsRef = fire.database().ref("favoris");
+      itemsRef.on("value", (snapshot) => {
+        let data = snapshot.val();
+        let lstFavoris = [];
+        Object.keys(data).forEach((key) => {
+          lstFavoris.push({
+            id: key,
+            favoris_id: data[key].favoris_id,
+          });
+        });
+        this.favoris = lstFavoris;
       });
     },
   },
@@ -235,5 +292,9 @@ export default {
   max-width: 480px;
   margin-top: 15%;
   padding: 5%;
+}
+
+.v-dialog {
+  max-width: 400px;
 }
 </style>

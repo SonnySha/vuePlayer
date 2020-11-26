@@ -1,9 +1,12 @@
 <template>
   <div class="mt-6">
-    <h3>{{ this.songs[$route.params.idauthor]["author"] }}</h3>
-    <p class="bio">
-      Biographie: {{ this.songs[$route.params.idauthor]["bio"] }}
-    </p>
+    <div v-if="this.songs.length > 0">
+      <h3>{{ this.songs[$route.params.idauthor]["author"] }}</h3>
+      <p class="bio">
+        Biographie: {{ this.songs[$route.params.idauthor]["bio"] }}
+      </p>
+    </div>
+    <p v-else>Chargement...</p>
   </div>
 </template>
 
@@ -23,7 +26,4 @@ export default {
 </script>
 
 <style scoped>
-.bio {
-  /* max-width: 300px; */
-}
 </style>
