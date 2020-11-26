@@ -140,9 +140,9 @@ import fire from "../../fire";
 
 export default {
   created() {
-    fetch("http://localhost:3000/playlist")
+    fetch("https://sonnyplayer-e1ac9.firebaseio.com/playlist.json")
       .then((response) => response.json())
-      .then((json) => (this.songs = json));
+      .then((json) => (this.songsObj = json));
   },
   data: function () {
     return {
@@ -152,6 +152,7 @@ export default {
       isPlayed: false,
       indexSongPlayed: -1,
       songs: [],
+      songsObj: [],
       songsWaiting: [],
       favoris: [],
       dialog: false,
@@ -219,6 +220,9 @@ export default {
         this.favoris = lstFavoris;
       });
     },
+    arrayByObj() {
+      return "erere";
+    },
   },
   watch: {
     indexSongPlayed(newIndex) {
@@ -239,10 +243,6 @@ export default {
         playerSource.src = this.songs[newIndex]["urlSong"];
       }
 
-      // this.title = this.songs[newIndex]["title"];
-      // this.author = this.songs[newIndex]["author"];
-      // this.imgSong = this.songs[newIndex]["img"];
-      // playerSource.src = this.songs[newIndex]["urlSong"];
       player.load();
       player.play();
       this.isPlayed = true;
@@ -251,6 +251,14 @@ export default {
       let player = this.$refs["player"];
       player.volume = newValue / 100;
       // console.log(newValue / 100);
+    },
+    songsObj() {
+      let arraySongs = [];
+
+      for (const song of Object.keys(this.songsObj)) {
+        arraySongs.push(this.songsObj[song]);
+      }
+      this.songs = arraySongs;
     },
   },
 };
