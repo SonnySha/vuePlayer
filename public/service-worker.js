@@ -19,6 +19,7 @@ self.addEventListener("install", event => {
 
 //Cache first
 self.addEventListener('fetch', function (event) {
+    // console.log(event.request.url);
     event.respondWith(
 
         // Cache les ressources asynchrones

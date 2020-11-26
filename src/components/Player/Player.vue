@@ -34,7 +34,14 @@
                 <v-icon class="iconPlayer" dark> mdi-skip-next </v-icon>
               </v-btn>
 
-              <audio id="audio" ref="player">
+              <knob-control
+                :min="0"
+                :max="100"
+                :size="80"
+                v-model="volume"
+              ></knob-control>
+              <p>{{ this.songs[0]["title"] }}</p>
+              <audio id="audio" ref="player" volume="0.4" preload="auto">
                 <source id="playerSource" ref="playerSource" src="" />
                 Your browser does not support the audio format.
               </audio>
@@ -108,6 +115,8 @@
 
 <script>
 import Playlist from "./Playlist";
+import knobControl from "vue-knob-control";
+
 export default {
   created() {
     fetch("http://localhost:3000/playlist")
@@ -124,10 +133,12 @@ export default {
       songs: [],
       songsWaiting: [],
       dialog: false,
+      volume: 40,
     };
   },
   components: {
     Playlist,
+    knobControl,
   },
   methods: {
     playSong() {
@@ -199,6 +210,11 @@ export default {
       player.load();
       player.play();
       this.isPlayed = true;
+    },
+    volume(newValue) {
+      let player = this.$refs["player"];
+      player.volume = newValue / 100;
+      // console.log(newValue / 100);
     },
   },
 };
