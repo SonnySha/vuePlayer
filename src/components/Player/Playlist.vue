@@ -18,11 +18,9 @@
         <v-list-item-action>
           <v-row>
             <v-btn class="ma-2" x-small outlined fab dark color="error">
-              <v-icon @click="addSongFavoris(index)" dark>
-                mdi-heart-plus
-              </v-icon>
+              <v-icon dark> mdi-heart-plus </v-icon>
             </v-btn>
-            <v-btn class="ma-2" x-small outlined fab dark color="teal">
+            <v-btn class="ma-2" x-small outlined fab dark color="blue">
               <v-icon @click="songWaiting(index)" dark>
                 mdi-format-list-bulleted-square
               </v-icon>

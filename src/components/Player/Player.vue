@@ -40,8 +40,7 @@
                 :size="80"
                 v-model="volume"
               ></knob-control>
-              <p>{{ this.songs[0]["title"] }}</p>
-              <audio id="audio" ref="player" volume="0.4" preload="auto">
+              <audio id="audio" ref="player" volume="0.2" preload="auto">
                 <source id="playerSource" ref="playerSource" src="" />
                 Your browser does not support the audio format.
               </audio>
@@ -49,7 +48,8 @@
           </v-card-actions>
         </v-card>
         <div class="playerDisplay">
-          <v-row justify="center">
+          <!-- Prochainement pour la modal FAVORIS -->
+          <!-- <v-row justify="center">
             <v-dialog v-model="dialog" persistent max-width="290">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn color="red" dark v-bind="attrs" v-on="on">
@@ -59,27 +59,6 @@
               <v-card>
                 <v-card-title class="headline"> Vos favoris </v-card-title>
                 <v-card-text>
-                  <!-- <v-list>
-                    <v-list-item
-                      v-for="(songid, index) in this.songsFavoris"
-                      :key="index"
-                    >
-                      <v-list-item-avatar>
-                        <v-img :src="this.songs[songid].img"></v-img>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title
-                          >{{ songid }}
-                          {{ this.songs[songid].title }}</v-list-item-title
-                        >
-                        <v-list-item-subtitle
-                          ><p>
-                            {{ this.songs[songid].author }}
-                          </p></v-list-item-subtitle
-                        >
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list> -->
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -89,7 +68,7 @@
                 </v-card-actions>
               </v-card>
             </v-dialog>
-          </v-row>
+          </v-row> -->
 
           <h2 v-if="this.songsWaiting.length > 0">File d'attente</h2>
           <ul>
@@ -133,7 +112,7 @@ export default {
       songs: [],
       songsWaiting: [],
       dialog: false,
-      volume: 40,
+      volume: 20,
     };
   },
   components: {
