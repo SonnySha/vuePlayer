@@ -1,8 +1,28 @@
 <template>
   <div>
     <h2>Ma playlist</h2>
+
+    <v-row>
+      <v-col>
+        <v-select
+          v-model="inputOverflow"
+          :items="['title', 'author']"
+          label="Option de recherche"
+          dense
+          outlined
+        ></v-select>
+      </v-col>
+      <v-col>
+        <v-text-field
+          v-model="inputSearch"
+          label="Recherche"
+          class="pa-0 mt-0"
+        ></v-text-field>
+      </v-col>
+    </v-row>
+
     <v-list>
-      <v-list-item v-for="(song, index) in this.songs" :key="index">
+      <v-list-item v-for="(song, index) in filterPlaylist" :key="index">
         <v-list-item-avatar>
           <v-img :src="song.img"></v-img>
         </v-list-item-avatar>
@@ -40,7 +60,10 @@ import fire from "../../fire";
 
 export default {
   data: function () {
-    return {};
+    return {
+      inputSearch: "",
+      inputOverflow: "",
+    };
   },
   props: {
     songs: Array,
@@ -56,7 +79,13 @@ export default {
       const favori = {
         favoris_id: idFavoris,
       };
-      fire.database().ref("favoris").push(favori);
+
+      if (this.$store.getters.existFavoris(idFavoris)) {
+        console.log("Favoris deja enregistré");
+      } else {
+        fire.database().ref("favoris").push(favori);
+      }
+
       // this.mounted();
     },
     updData() {
@@ -69,6 +98,21 @@ export default {
         .child("-MN3H0r_sApLuNSGB9zR")
         // Update the “done” property to match local property
         .update({ username: "bienene !!!!" });
+    },
+  },
+  computed: {
+    filterPlaylist() {
+      if (this.inputOverflow == "") {
+        return this.songs;
+      }
+
+      if (this.inputSearch.length < 3) {
+        return this.songs;
+      } else {
+        return this.songs.filter((elt) =>
+          elt[this.inputOverflow].includes(this.inputSearch)
+        );
+      }
     },
   },
 };

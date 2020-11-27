@@ -48,78 +48,13 @@
           </v-card-actions>
         </v-card>
         <div class="playerDisplay">
-          <!-- Modal FAVORIS -->
-          <v-row justify="center">
-            <v-dialog v-model="dialog" persistent max-width="400">
-              <template v-slot:activator="{ on, attrs }">
-                <v-btn color="red" dark v-bind="attrs" v-on="on">
-                  <v-icon dark> mdi-heart </v-icon>
-                  {{ favoris.length }} Favoris
-                </v-btn>
-              </template>
-              <v-card>
-                <v-card-title class="headline"> Vos favoris </v-card-title>
-                <v-card-text v-if="this.favoris.length > 0">
-                  <v-list>
-                    <v-list-item
-                      v-for="(favori, index) in this.favoris"
-                      :key="index"
-                    >
-                      <v-btn
-                        class="ma-2"
-                        x-small
-                        outlined
-                        fab
-                        dark
-                        color="error"
-                      >
-                        <v-icon @click="delFavoris(favori.id)" dark>
-                          mdi-delete-forever-outline
-                        </v-icon>
-                      </v-btn>
-                      <v-list-item-avatar>
-                        <v-img :src="songs[favori.favoris_id].img"></v-img>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>{{
-                          songs[favori.favoris_id].title
-                        }}</v-list-item-title>
-                        <v-list-item-subtitle>{{
-                          songs[favori.favoris_id].author
-                        }}</v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list>
-                </v-card-text>
-                <v-card-text v-else>
-                  <p>Aucun favoris</p>
-                </v-card-text>
-                <v-card-actions>
-                  <v-spacer></v-spacer>
-                  <v-btn color="green darken-1" text @click="dialog = false">
-                    Fermer
-                  </v-btn>
-                </v-card-actions>
-              </v-card>
-            </v-dialog>
-          </v-row>
-          <h2 v-if="this.displaySongsWaiting.length > 0">File d'attente</h2>
-          <ul>
-            <li
-              v-for="(songWaitingId, index) in this.displaySongsWaiting"
-              :key="index"
-            >
-              {{ songs[songWaitingId].title }}
-            </li>
-          </ul>
-          <!-- <input
-            v-model="search"
-            type="search"
-            placeholder="rechercher une musique"
-          /> -->
-          <p>qzdzqd</p>
-          {{ this.test }}
-          <Playlist @songIndex="playSongByIndex" :songs="songs"></Playlist>
+
+          <Songs-favoris></Songs-favoris>
+
+          <Songs-waiting></Songs-waiting>
+
+          <!--  -->
+          <Playlist @songIndex="playSongByIndex" :songs="this.songs"></Playlist>
           <router-view></router-view>
         </div>
       </v-col>
@@ -133,8 +68,8 @@
 <script>
 import Playlist from "./Playlist";
 import knobControl from "vue-knob-control";
-import fire from "../../fire";
-import { mapGetters } from "vuex";
+import SongsWaiting from "./subComponets/songsWaiting";
+import SongsFavoris from "./subComponets/songsFavoris"
 
 export default {
   created() {
@@ -142,58 +77,27 @@ export default {
       .then((response) => response.json())
       .then((json) => {
         this.songs = json;
+        this.$store.dispatch("initSongs", json);
       });
 
-    const refFavoris = fire.database().ref("/favoris");
-    // **** Temps reel sur bdd favoris
-    //Recupére les objet brute
-    // ref.on(
-    //   "value",
-    //   (snapshot) => {
-    //     this.favoris = snapshot.val();
-    //     console.log(snapshot.val());
-    //   },
-    //   (errorObject) => {
-    //     console.log("error: " + errorObject.code);
-    //   }
-    // );
 
-    refFavoris.on("value", (snapshot) => {
-      let data = snapshot.val();
-      let lstFavoris = [];
-
-      try {
-        Object.keys(data).forEach((key) => {
-          lstFavoris.push({
-            id: key,
-            favoris_id: data[key].favoris_id,
-          });
-        });
-      } catch {
-        console.log("Aucun favoris");
-      }
-
-      this.favoris = lstFavoris;
-    });
   },
   data: function () {
     return {
-      test: 20,
       title: "",
       author: "",
       imgSong: "https://memorykeeper.fr/apisongs/img/spotify.jpg",
       isPlayed: false,
       indexSongPlayed: -1,
       songs: [],
-      favoris: [],
-      dialog: false,
       volume: 20,
-      search: "",
     };
   },
   components: {
     Playlist,
     knobControl,
+    SongsWaiting,
+    SongsFavoris,
   },
   methods: {
     playSong() {
@@ -229,11 +133,7 @@ export default {
     playSongByIndex(indexNewSong) {
       this.indexSongPlayed = indexNewSong;
     },
-    delFavoris(idFavori) {
-      fire.database().ref("favoris").child(idFavori).remove();
 
-      this.mounted();
-    },
     mounted() {
       //Remplacé par temps reel dans create
       // const itemsRef = fire.database().ref("favoris");
@@ -285,9 +185,7 @@ export default {
       // console.log(newValue / 100);
     },
   },
-  computed: {
-    ...mapGetters(["displaySongsWaiting"]),
-  },
+
 };
 </script>
 
