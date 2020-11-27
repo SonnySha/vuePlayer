@@ -51,18 +51,7 @@ export default {
   name: "songsFavoris",
   created() {
     const refFavoris = fire.database().ref("/favoris");
-    // **** Temps reel sur bdd favoris
-    //Recupére les objet brute
-    // ref.on(
-    //   "value",
-    //   (snapshot) => {
-    //     this.favoris = snapshot.val();
-    //     console.log(snapshot.val());
-    //   },
-    //   (errorObject) => {
-    //     console.log("error: " + errorObject.code);
-    //   }
-    // );
+
 
     refFavoris.on("value", (snapshot) => {
       let data = snapshot.val();

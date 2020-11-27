@@ -35,7 +35,6 @@ export default {
   },
   methods: {
     delFavoris() {
-      console.log(this.indexSong)
       fire.database().ref("favoris").child(this.indexSong).remove();
 
     },

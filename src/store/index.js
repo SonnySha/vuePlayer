@@ -17,7 +17,6 @@ export default new Vuex.Store({
       return state.favoris.length
     },
     rtnFavoris: state => {
-      console.log(state.favoris)
       return state.favoris
     },
     rtnSongs: state => {

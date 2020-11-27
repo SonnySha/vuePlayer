@@ -89,7 +89,6 @@ export default {
       // this.mounted();
     },
     updData() {
-      console.log("update !");
       // task.done = !task.done;
       // Select specific list, and find the specific item to mutate with its index
       fire
