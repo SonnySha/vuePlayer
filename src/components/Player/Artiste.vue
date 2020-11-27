@@ -13,14 +13,25 @@
 <script>
 export default {
   created() {
-    fetch("http://localhost:3000/playlist")
+    fetch("https://sonnyplayer-e1ac9.firebaseio.com/playlist.json")
       .then((response) => response.json())
-      .then((json) => (this.songs = json));
+      .then((json) => (this.songsObj = json));
   },
   data: function () {
     return {
       songs: [],
+      songsObj: [],
     };
+  },
+  watch: {
+    songsObj() {
+      let arraySongs = [];
+
+      for (const song of Object.keys(this.songsObj)) {
+        arraySongs.push(this.songsObj[song]);
+      }
+      this.songs = arraySongs;
+    },
   },
 };
 </script>
