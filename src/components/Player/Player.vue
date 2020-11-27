@@ -34,7 +34,13 @@
                 <v-icon class="iconPlayer" dark> mdi-skip-next </v-icon>
               </v-btn>
 
-              <audio id="audio" ref="player">
+              <knob-control
+                :min="0"
+                :max="100"
+                :size="80"
+                v-model="volume"
+              ></knob-control>
+              <audio id="audio" ref="player" volume="0.2" preload="auto">
                 <source id="playerSource" ref="playerSource" src="" />
                 Your browser does not support the audio format.
               </audio>
@@ -42,7 +48,78 @@
           </v-card-actions>
         </v-card>
         <div class="playerDisplay">
-          <v-btn @click="openPlaylist">Playlist</v-btn>
+          <!-- Modal FAVORIS -->
+          <v-row justify="center">
+            <v-dialog v-model="dialog" persistent max-width="400">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn color="red" dark v-bind="attrs" v-on="on">
+                  <v-icon dark> mdi-heart </v-icon>
+                  {{ favoris.length }} Favoris
+                </v-btn>
+              </template>
+              <v-card>
+                <v-card-title class="headline"> Vos favoris </v-card-title>
+                <v-card-text v-if="this.favoris.length > 0">
+                  <v-list>
+                    <v-list-item
+                      v-for="(favori, index) in this.favoris"
+                      :key="index"
+                    >
+                      <v-btn
+                        class="ma-2"
+                        x-small
+                        outlined
+                        fab
+                        dark
+                        color="error"
+                      >
+                        <v-icon @click="delFavoris(favori.id)" dark>
+                          mdi-delete-forever-outline
+                        </v-icon>
+                      </v-btn>
+                      <v-list-item-avatar>
+                        <v-img :src="songs[favori.favoris_id].img"></v-img>
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title>{{
+                          songs[favori.favoris_id].title
+                        }}</v-list-item-title>
+                        <v-list-item-subtitle>{{
+                          songs[favori.favoris_id].author
+                        }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                  </v-list>
+                </v-card-text>
+                <v-card-text v-else>
+                  <p>Aucun favoris</p>
+                </v-card-text>
+                <v-card-actions>
+                  <v-spacer></v-spacer>
+                  <v-btn color="green darken-1" text @click="dialog = false">
+                    Fermer
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-dialog>
+          </v-row>
+          <h2 v-if="this.displaySongsWaiting.length > 0">File d'attente</h2>
+          <ul>
+            <li
+              v-for="(songWaitingId, index) in this.displaySongsWaiting"
+              :key="index"
+            >
+              {{ songs[songWaitingId].title }}
+            </li>
+          </ul>
+          <!-- <input
+            v-model="search"
+            type="search"
+            placeholder="rechercher une musique"
+          /> -->
+          <p>qzdzqd</p>
+          {{ this.test }}
+          <Playlist @songIndex="playSongByIndex" :songs="songs"></Playlist>
           <router-view></router-view>
         </div>
       </v-col>
@@ -54,23 +131,70 @@
 </template>
 
 <script>
+import Playlist from "./Playlist";
+import knobControl from "vue-knob-control";
+import fire from "../../fire";
+import { mapGetters } from "vuex";
+
 export default {
   created() {
-    fetch("http://localhost:3000/playlist")
+    fetch("https://sonnyplayer-e1ac9.firebaseio.com/playlist.json")
       .then((response) => response.json())
-      .then((json) => (this.songs = json));
+      .then((json) => {
+        this.songs = json;
+      });
+
+    const refFavoris = fire.database().ref("/favoris");
+    // **** Temps reel sur bdd favoris
+    //Recupére les objet brute
+    // ref.on(
+    //   "value",
+    //   (snapshot) => {
+    //     this.favoris = snapshot.val();
+    //     console.log(snapshot.val());
+    //   },
+    //   (errorObject) => {
+    //     console.log("error: " + errorObject.code);
+    //   }
+    // );
+
+    refFavoris.on("value", (snapshot) => {
+      let data = snapshot.val();
+      let lstFavoris = [];
+
+      try {
+        Object.keys(data).forEach((key) => {
+          lstFavoris.push({
+            id: key,
+            favoris_id: data[key].favoris_id,
+          });
+        });
+      } catch {
+        console.log("Aucun favoris");
+      }
+
+      this.favoris = lstFavoris;
+    });
   },
   data: function () {
     return {
+      test: 20,
       title: "",
       author: "",
-      imgSong: "http://localhost/apisongs/img/spotify.jpg",
+      imgSong: "https://memorykeeper.fr/apisongs/img/spotify.jpg",
       isPlayed: false,
       indexSongPlayed: -1,
       songs: [],
+      favoris: [],
+      dialog: false,
+      volume: 20,
+      search: "",
     };
   },
-
+  components: {
+    Playlist,
+    knobControl,
+  },
   methods: {
     playSong() {
       let player = this.$refs["player"];
@@ -105,25 +229,64 @@ export default {
     playSongByIndex(indexNewSong) {
       this.indexSongPlayed = indexNewSong;
     },
-    openPlaylist() {
-      this.$router.push({
-        name: "playlist",
-        params: {},
-      });
+    delFavoris(idFavori) {
+      fire.database().ref("favoris").child(idFavori).remove();
+
+      this.mounted();
+    },
+    mounted() {
+      //Remplacé par temps reel dans create
+      // const itemsRef = fire.database().ref("favoris");
+      // itemsRef.on("value", (snapshot) => {
+      //   let data = snapshot.val();
+      //   let lstFavoris = [];
+      //   try {
+      //     Object.keys(data).forEach((key) => {
+      //       lstFavoris.push({
+      //         id: key,
+      //         favoris_id: data[key].favoris_id,
+      //       });
+      //     });
+      //   } catch {
+      //     console.log("Aucun favoris");
+      //   }
+      //   this.favoris = lstFavoris;
+      // });
     },
   },
   watch: {
     indexSongPlayed(newIndex) {
       let player = this.$refs["player"];
       let playerSource = this.$refs["playerSource"];
-      this.title = this.songs[newIndex]["title"];
-      this.author = this.songs[newIndex]["author"];
-      this.imgSong = this.songs[newIndex]["img"];
-      playerSource.src = this.songs[newIndex]["urlSong"];
+
+      // Si il y a une musique mis en attente on la jouera
+      if (this.$store.state.songsWaiting.length > 0) {
+        //On recupére l'index de la musique qui est en attente
+        let idSongWait = this.$store.state.songsWaiting[0];
+        this.title = this.songs[idSongWait]["title"];
+        this.author = this.songs[idSongWait]["author"];
+        this.imgSong = this.songs[idSongWait]["img"];
+        playerSource.src = this.songs[idSongWait]["urlSong"];
+        this.$store.dispatch("shiftSongWaiting");
+      } else {
+        this.title = this.songs[newIndex]["title"];
+        this.author = this.songs[newIndex]["author"];
+        this.imgSong = this.songs[newIndex]["img"];
+        playerSource.src = this.songs[newIndex]["urlSong"];
+      }
+
       player.load();
       player.play();
       this.isPlayed = true;
     },
+    volume(newValue) {
+      let player = this.$refs["player"];
+      player.volume = newValue / 100;
+      // console.log(newValue / 100);
+    },
+  },
+  computed: {
+    ...mapGetters(["displaySongsWaiting"]),
   },
 };
 </script>
@@ -161,6 +324,7 @@ export default {
 }
 
 .playerDisplay {
+  max-width: 480px;
   margin-top: 15%;
   padding: 5%;
 }

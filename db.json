@@ -3,32 +3,37 @@
         {
             "title": "Bad kind of mongrel",
             "author": "Michael MCQuaid",
-            "urlSong": "http://localhost/apisongs/songs/bad-kind-of-mongrel.mp3",
-            "img": "http://localhost/apisongs/img/bad-kind-of-mongrel.jpg"
+            "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam varius, purus ac auctor iaculis, magna libero laoreet massa, non vulputate nunc sem et nunc. Phasellus vel imperdiet nisi. Curabitur nec molestie augue, a facilisis ex. Aenean vitae scelerisque eros, ut tincidunt dolor.",
+            "urlSong": "https://memorykeeper.fr/apisongs/songs/bad-kind-of-mongrel.mp3",
+            "img": "https://memorykeeper.fr/apisongs/img/bad-kind-of-mongrel.jpg"
         },
         {
             "title": "My summer love",
             "author": "Belair",
-            "urlSong": "http://localhost/apisongs/songs/my-summer-love.mp3",
-            "img": "http://localhost/apisongs/img/my-summer-love.jpg"
+            "bio": "Aenean lobortis placerat maximus. In vitae diam massa. Fusce erat libero, tincidunt quis accumsan ut, eleifend volutpat orci. Praesent rhoncus sed elit non placerat",
+            "urlSong": "https://memorykeeper.fr/apisongs/songs/my-summer-love.mp3",
+            "img": "https://memorykeeper.fr/apisongs/img/my-summer-love.jpg"
         },
         {
             "title": "Roundabout",
             "author": "The IMG",
-            "urlSong": "http://localhost/apisongs/songs/roundabout.mp3",
-            "img": "http://localhost/apisongs/img/roundabout.jpg"
+            "bio": "Nullam finibus volutpat est nec vehicula. Vivamus eget sagittis massa, non sollicitudin ligula. Pellentesque eu justo convallis, elementum dui eu, auctor ante.",
+            "urlSong": "https://memorykeeper.fr/apisongs/songs/roundabout.mp3",
+            "img": "https://img.discogs.com/N-nQVo4Y2N9O5SQN5JO-EYg4mZg=/fit-in/300x300/filters:strip_icc():format(jpeg):mode_rgb():quality(40)/discogs-images/R-2326447-1346529079-5283.jpeg.jpg"
         },
         {
             "title": "Hungry",
             "author": "Weary Eyes",
-            "urlSong": "http://localhost/apisongs/songs/hungry.mp3",
-            "img": "http://localhost/apisongs/img/hungry.jpg"
+            "bio": "Duis urna est, convallis sit amet lorem ultrices, semper tincidunt elit. Aliquam ac facilisis leo, in tempor nisi. Etiam magna nisi, vehicula ac lacus sit amet,",
+            "urlSong": "https://memorykeeper.fr/apisongs/songs/hungry.mp3",
+            "img": "https://memorykeeper.fr/apisongs/img/hungry.jpg"
         },
         {
             "title": "Disco",
             "author": "Stage Engine",
-            "urlSong": "http://localhost/apisongs/songs/disco-kid.mp3",
-            "img": "http://localhost/apisongs/img/disco-kid.jpg"
+            "bio": "Quisque mi enim, pretium vitae imperdiet rutrum, lobortis a risus. Pellentesque vitae lorem quis orci placerat tempus. Donec quis blandit lacus. Sed",
+            "urlSong": "https://memorykeeper.fr/apisongs/songs/disco-kid.mp3",
+            "img": "https://memorykeeper.fr/apisongs/img/disco-kid.jpg"
         }
     ]
 }
