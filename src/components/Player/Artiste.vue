@@ -13,6 +13,7 @@
 <script>
 export default {
   created() {
+    //On imagine que il y a une connexion à une autre API qui nous donne plus d'info sur l'artiste, avec des id etc...
     fetch("https://sonnyplayer-e1ac9.firebaseio.com/playlist.json")
       .then((response) => response.json())
       .then((json) => (this.songs = json));
